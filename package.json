@@ -1,15 +1,19 @@
 {
-  "name": "entrance-task-3-2",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest --coverage"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "jest": "^23.4.2"
-  }
+    "name": "entrance-task-3-2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "precommit": "pretty-quick --staged & npm test",
+        "test": "jest --coverage"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "husky": "^0.14.3",
+        "jest": "^23.4.2",
+        "prettier": "1.14.2",
+        "pretty-quick": "^1.6.0"
+    }
 }

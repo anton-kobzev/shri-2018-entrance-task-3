@@ -28,28 +28,33 @@ function getModeTimeRange(mode) {
 function main(input) {
     const rates = []
     for (const rate of input.rates) {
-        for (let i = rate.from; i != rate.to; i == 23 ? i = 0 : i++) {
+        for (let i = rate.from; i != rate.to; i == 23 ? (i = 0) : i++) {
             rates[i] = rate.value
         }
     }
 
-    const priceTable = calcPriceTable(rates)
-
-    const schedule = {}, schedulePower = []
+    const priceTable = calcPriceTable(rates),
+        schedule = {},
+        schedulePower = [],
+        consumedEnergy = { value: 0, devices: {} }
     for (let i = 0; i < 24; i++) {
         schedule[i] = []
         schedulePower[i] = 0
     }
 
-    const consumedEnergy = { value: 0, devices: {} }
-
     for (const device of input["devices"]) {
         const { from, to } = getModeTimeRange(device.mode)
         let min = null
 
-        for (let i = from; i != to - device.duration + 1; i == 23 && to < 24 ? i = 0 : i++) {
-            if (schedulePower[i] + device.power <= input.maxPower &&
-                (min === null || priceTable[device.duration - 1][i] < min.value)) {
+        for (
+            let i = from;
+            i != to - device.duration + 1;
+            i == 23 && to < 24 ? (i = 0) : i++
+        ) {
+            if (
+                schedulePower[i] + device.power <= input.maxPower &&
+                (min === null || priceTable[device.duration - 1][i] < min.value)
+            ) {
                 min = { value: priceTable[device.duration - 1][i], from: i }
             }
         }
@@ -59,7 +64,8 @@ function main(input) {
             schedulePower[i] += device.power
         }
 
-        const consumed = Math.round(min.value * device.power / 1000 * 100) / 100
+        const consumed =
+            Math.round(((min.value * device.power) / 1000) * 100) / 100
         consumedEnergy.value += consumed
         consumedEnergy.devices[device.id] = consumed
     }
@@ -69,49 +75,4 @@ function main(input) {
     return { schedule, consumedEnergy }
 }
 
-module.exports = main;
-
-console.log(main({
-    devices: [
-        {
-            "id": "A",
-            "name": "A",
-            "power": 100,
-            "duration": 1
-        },
-        {
-            "id": "B",
-            "name": "B",
-            "power": 1000,
-            "duration": 2
-        }
-    ],
-    rates: [
-        {
-            "from": 0,
-            "to": 2,
-            "value": 1
-        },
-        {
-            "from": 2,
-            "to": 4,
-            "value": 3
-        },
-        {
-            "from": 4,
-            "to": 8,
-            "value": 5
-        },
-        {
-            "from": 8,
-            "to": 9,
-            "value": 10
-        },
-        {
-            "from": 9,
-            "to": 0,
-            "value": 5
-        },
-    ],
-    "maxPower": 1000
-}))
+module.exports = main
